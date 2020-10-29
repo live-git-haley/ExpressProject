@@ -31,8 +31,8 @@ User.create(new_user, function(err, user) {
 }
 };
 
-exports.findById = function(req, res) {
-User.findById(req.params.id, function(err, user) {
+exports.findByEmail = function(req, res) {
+User.findByEmail(req.params.email, function(err, user) {
   if (err)
   res.send(err);
   res.json(user);
@@ -50,7 +50,8 @@ exports.update = function(req, res) {
 }
 };
 exports.delete = function(req, res) {
-User.delete( req.params.id, function(err, user) {
+  console.log("Made it to the controller");
+User.delete( req.params.email, function(err, user) {
   if (err)
   res.send(err);
   res.json({ error:false, message: 'User successfully deleted' });

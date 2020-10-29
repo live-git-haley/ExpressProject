@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Header } from './components/Header'
-import { Users } from './components/Users'
 import { DisplayBoard } from './components/DisplayBoard'
 import CreateUser from './components/CreateUser'
-import { getAllUsers, createUser } from './service/service'
+import { getAllUsers, createUser, findUserbyEmail } from './service/service'
+import { Login } from './components/Login';
+import { LoggedIn } from './components/LoggedIn';
+import HomePage from './components/HomePage';
+
 
 
 class App extends Component {
@@ -15,8 +18,59 @@ class App extends Component {
     users: [],
     numberOfUsers: 0,
     render : '',
-    updateUser: ''
+    updateUser: '',
+    currentUser: {},
+    loggedIn: false,
+    page: 'Home'
   }
+
+  changePage(page) {
+
+    
+    switch(page) {
+      case 'Home':
+        return <HomePage 
+        onChangeForm2 = {this.onChangeForm2}
+        checkLogin = {this.checkLogin}
+        >
+        </HomePage>;
+        
+      case 'Create':
+        return <CreateUser 
+        user={this.state.user}
+        onChangeForm={this.onChangeForm}
+        createUser={this.createUser}
+        >
+      </CreateUser>;
+
+       case "LoggedIn":
+         let user1 = this.state.currentUser;
+         console.log("IN THE LOGGEN IN CASE, printing current state user >>> " + user1.email)
+         return <LoggedIn
+          user = {this.state.currentUser}
+          showUsers = {this.showUsers}
+          hideUsers = {this.hideUsers}
+
+         /> 
+      default:
+        return <HomePage 
+        onChangeForm2 = {this.onChangeForm2}
+        checkLogin = {this.checkLogin}
+        >
+        </HomePage>;
+    }
+    
+  }
+
+  handleClick(event, newPage) {
+    console.log(newPage)
+    this.setState({
+      page: newPage
+    });
+
+    // prevent reload of page caused by clicking links
+  }
+
 
   createUser = (e) => {
       createUser(this.state.user)
@@ -24,8 +78,11 @@ class App extends Component {
           console.log(response);
           this.setState({numberOfUsers: this.state.numberOfUsers + 1})
       });
+
+      this.setState({page: 'Home'})
   }
 
+  
   getAllUsers = () => {
     getAllUsers()
       .then(users => {
@@ -33,27 +90,47 @@ class App extends Component {
         this.setState({users: users, numberOfUsers: users.length})
       });
   }
-  showUsers(){
-    console.log("clicked...");
-    this.setState({render: true})
-    getAllUsers()
-      .then(users => {
-        console.log(users)
-        this.setState({users: users, numberOfUsers: users.length})
+ 
+  checkLogin = (e) => {
+    let user = this.state.user;
+    let email = user.email;
+    let password = user.password;
+    findUserbyEmail(email)
+      .then(userFound => {
+        if(password === userFound[0].password){
+          console.log("CORRECT")
+
+          this.setState({currentUser: userFound[0]})
+          this.setState({loggedIn: true})
+          this.setState({page: "LoggedIn"})
+        }
+        else{
+          alert("Wrong credentials")
+        }
       });
-  }
-
-  hideUsers(){
-    console.log("clicked...");
-    this.setState({render: false})
     
+     
   }
 
-  updateUser = (e) => {
+  onChangeForm2 = (e) => {
+    let user = this.state.user
+  
+   if (e.target.name === 'email') {
+        user.email = e.target.value;
+    } else if (e.target.name === 'password') {
+    
+        user.password = e.target.value;
+    }
+    
+   console.log("USER CREDENTIALS >>>")
+   console.log(user.email)
+   console.log(user.password)
 
-    this.setState({update: true})
+    this.setState({user})
+    
+}
 
-  }
+ 
 
   onChangeForm = (e) => {
       let user = this.state.user
@@ -75,6 +152,10 @@ class App extends Component {
           else{
             console.log("Passwords do not match");
           }
+      }
+      else if(e.target.name === "newPass"){
+        console.log("NEw Password >>>> " + e.target.value)
+
       } 
       
      
@@ -92,30 +173,29 @@ class App extends Component {
         <div className="container mrgnbtm">
           <div className="row">
             <div className="col-md-8">
-                <CreateUser 
+
+            <button type="button" onClick={(event) => this.handleClick(event, 'Create')} className="btn btn-success">Create User</button>
+
+                {/* <CreateUser 
                   user={this.state.user}
                   onChangeForm={this.onChangeForm}
                   createUser={this.createUser}
                   >
-                </CreateUser>
+                </CreateUser> */}
             </div>
             <div className="col-md-4">
-                <DisplayBoard
+                {/* <DisplayBoard
                   numberOfUsers={this.state.numberOfUsers}
                   getAllUsers={this.getAllUsers}
                 >
-                </DisplayBoard>
+                </DisplayBoard> */}
             </div>
           </div>
         </div>
 
-        <button type="button" onClick={(e) => this.showUsers('show')} className="btn btn-warning">Show Users</button>
-        <button type="button" onClick={(e) => this.hideUsers('show')} className="btn btn-primary">Hide Users</button>
-
-        <div className="row mrgnbtm">
-           {this.state.render && <Users users={this.state.users} updateUserRow = {this.state.updateUser}></Users>}
-
-        </div>
+       
+       
+        {this.changePage(this.state.page)}
       </div>
     );
   }

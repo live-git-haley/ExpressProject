@@ -4,6 +4,19 @@ export async function getAllUsers() {
     return await response.json();
 }
 
+export async function deleteUser(email) {
+
+  const response = await fetch('/api/v1/users/' + email,{ method: 'DELETE'});
+  return await response.json();
+}
+
+
+export async function findUserbyEmail(email) {
+
+  const response = await fetch('/api/v1/users/' + email);
+  return await response.json();
+}
+
 export async function CheckPassword(inputtxt) 
 { 
 

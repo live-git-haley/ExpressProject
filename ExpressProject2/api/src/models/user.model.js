@@ -21,8 +21,8 @@ else{
 }
 });
 };
-User.findById = function (id, result) {
-dbConn.query("Select * from user where id = ? ", id, function (err, res) {
+User.findByEmail = function (email, result) {
+dbConn.query("Select * from user where email = ? ", email, function (err, res) {
 if(err) {
   console.log("error: ", err);
   result(err, null);
@@ -46,7 +46,7 @@ else{
 });
 };
 User.update = function(id, user, result){
-dbConn.query("UPDATE user SET id=?,name=?, color = ? ,WHERE id = ?", [user.name, user.color ,id], function (err, res) {
+dbConn.query("UPDATE user SET password = ? ,WHERE id = ?", [id, user.password], function (err, res) {
 if(err) {
   console.log("error: ", err);
   result(null, err);
@@ -55,13 +55,16 @@ if(err) {
 }
 });
 };
-User.delete = function(id, result){
-dbConn.query("DELETE FROM user WHERE id = ?", [id], function (err, res) {
+User.delete = function(email, result){
+  console.log("In the model function")
+  console.log("DELETE FROM user WHERE email = " + email)
+dbConn.query("DELETE FROM user WHERE email = ?", [email], function (err, res) {
 if(err) {
   console.log("error: ", err);
   result(null, err);
 }
 else{
+  console.log(res);
   result(null, res);
 }
 });
