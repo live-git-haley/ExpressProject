@@ -9,6 +9,7 @@ export const Users = ({users, onChangeForm}) => {
     const [newPassword1, setPassword] = useState('');
     const [currUser, setCurrUser] = useState('');
 
+
     
     function deleteUser1(email){
      deletethisUser(email);
@@ -25,16 +26,30 @@ export const Users = ({users, onChangeForm}) => {
       }
 
     function savePassword(e){
-      console.log(newPassword1)
+        let userEmail = sessionStorage.getItem('email');
+        console.log(newPassword1)
+        updateUser(userEmail, newPassword1)
+        .then(response => {
+          console.log(response);
+      });
     }
     if (users.length === 0) return null
+    
+     function handleChange(event)  {
+    
+           setPassword(event.target.value)
+
+    }
+
     const TableData = ({user}) => {
         console.log(user.email)
+        sessionStorage.setItem("email",user.email)
+
          return(
              <td>
             <form>
-             <input type="text"  onChange={e => setPassword(e.target.value)} value = {newPassword1} className="form-control"  name="newPass" id="newPass" placeholder={user.password} />
-             <button type="button" onClick={(e) => savePassword()}className="btn btn-success">Save</button>
+             <input type="text"   onChange={setPassword()}  className="form-control"  name="newPass" id="newPass"  />
+             <button type="button" onClick={(e) => savePassword(e)}className="btn btn-success">Save</button>
              </form>
              </td>
          )
@@ -83,7 +98,8 @@ export const Users = ({users, onChangeForm}) => {
                 <tr>
                     <th>Emails</th>
                     <th>Passwords</th>
-                    <th>Update</th>
+                    <th>Edit</th>
+                    {update && <th> Edit</th>}
                     <th>Delete</th>
 
          

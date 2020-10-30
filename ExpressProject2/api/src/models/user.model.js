@@ -45,8 +45,8 @@ else{
 }
 });
 };
-User.update = function(id, user, result){
-dbConn.query("UPDATE user SET password = ? ,WHERE id = ?", [id, user.password], function (err, res) {
+User.update = function(email, newPassword, result){
+dbConn.query("UPDATE user SET password = ? ,WHERE email = ?", [email, newPassword], function (err, res) {
 if(err) {
   console.log("error: ", err);
   result(null, err);

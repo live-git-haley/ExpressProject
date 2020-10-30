@@ -8,7 +8,7 @@ router.post('/', userController.create);
 // Retrieve a single user with id
 router.get('/:email', userController.findByEmail);
 // Update a user with id
-router.put('/:id', userController.update);
+router.put('/:email/:newPassword', userController.update);
 // Delete a user with id
 router.delete('/:email', userController.delete);
 module.exports = router

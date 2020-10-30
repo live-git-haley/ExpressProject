@@ -51,7 +51,16 @@ class App extends Component {
           showUsers = {this.showUsers}
           hideUsers = {this.hideUsers}
 
-         /> 
+         />
+         case "LogOut":
+        //   this.setState({
+        //     currentUser: {}
+        // });
+          return <HomePage 
+          onChangeForm2 = {this.onChangeForm2}
+          checkLogin = {this.checkLogin}
+          >
+          </HomePage>;
       default:
         return <HomePage 
         onChangeForm2 = {this.onChangeForm2}
@@ -139,11 +148,12 @@ class App extends Component {
       console.log("First Password: "  + password);
       console.log("HELOOOO>>>>>");
 
-      user.id = this.state.numberOfUsers + 1;
      if (e.target.name === 'email') {
           user.email = e.target.value;
+          
       } else if (e.target.name === 'password') {
-      
+          console.log("In the IFF Statement")
+          console.log(e.target.getAttribute("password"));
           user.password = e.target.value;
 
           if(password === password2){
@@ -196,6 +206,8 @@ class App extends Component {
        
        
         {this.changePage(this.state.page)}
+        <button type="button" onClick={(event) => this.handleClick(event, 'LogOut')} className="btn btn-success">Logout</button>
+
       </div>
     );
   }

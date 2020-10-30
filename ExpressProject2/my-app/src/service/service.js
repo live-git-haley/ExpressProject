@@ -11,6 +11,14 @@ export async function deleteUser(email) {
 }
 
 
+export async function updateUser(email, newPassword) {
+  console.log("The API CALL");
+  console.log('/api/v1/users/' + email + '/' + newPassword);
+  const response = await fetch('/api/v1/users/' + email + '/' + newPassword,{ method: 'PUT'});
+  return await response.json();
+}
+
+
 export async function findUserbyEmail(email) {
 
   const response = await fetch('/api/v1/users/' + email);
@@ -24,7 +32,6 @@ export async function CheckPassword(inputtxt)
 var passw=  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{4,}$/;
 if(inputtxt.match(passw)) 
 { 
-  alert('Congrats! You successfully added a new user to the db.')
 
 return 1;
 }
@@ -50,10 +57,10 @@ export async function createUser(data) {
         body: JSON.stringify({data})
       })
     return await response.json();
+  alert('Congrats! You successfully added a new user to the db.')
+
   }
-  else{
-    alert("Not working...")
-  }
+
 
 }
 
