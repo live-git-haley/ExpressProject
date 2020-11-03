@@ -60,6 +60,7 @@ export async function createUser(data) {
   alert('Congrats! You successfully added a new user to the db.')
 
   }
+ 
 
 
 }

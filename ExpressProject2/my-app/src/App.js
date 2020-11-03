@@ -14,12 +14,16 @@ import HomePage from './components/HomePage';
 class App extends Component {
 
   state = {
-    user: {},
+    user: { email: "", password: ""},
     users: [],
+    email: '',
+    newPass: '',
     numberOfUsers: 0,
     render : '',
     updateUser: '',
     currentUser: {},
+    password1: '',
+    password2: '',
     loggedIn: false,
     page: 'Home'
   }
@@ -32,6 +36,7 @@ class App extends Component {
         return <HomePage 
         onChangeForm2 = {this.onChangeForm2}
         checkLogin = {this.checkLogin}
+        onChangeForm3 = {this.onChangeForm3}
         >
         </HomePage>;
         
@@ -65,6 +70,7 @@ class App extends Component {
         return <HomePage 
         onChangeForm2 = {this.onChangeForm2}
         checkLogin = {this.checkLogin}
+        onChangeForm3 = {this.onChangeForm3}
         >
         </HomePage>;
     }
@@ -82,14 +88,40 @@ class App extends Component {
 
 
   createUser = (e) => {
+   console.log("User passed from state" + this.state.user);
+    let valid = this.checkUser();
+    if(valid){
       createUser(this.state.user)
         .then(response => {
           console.log(response);
-          this.setState({numberOfUsers: this.state.numberOfUsers + 1})
       });
 
       this.setState({page: 'Home'})
   }
+  else{
+    alert("Passwords must match..");
+  }
+}
+
+
+  checkUser = (e) => {
+   let pass1 = this.state.password1;
+   let user1 = this.state.user
+   let pass2 = this.state.password2;
+   if(pass1 === pass2){
+     user1.email = this.state.email;
+     user1.password = this.state.password1;
+     
+     console.log("State email: " + JSON.stringify(user1));
+
+    return true;
+   }
+
+   return false;
+
+  }
+
+
 
   
   getAllUsers = () => {
@@ -139,35 +171,41 @@ class App extends Component {
     
 }
 
+onChangeForm3 = (e) => {
+  let user = this.state.user
+
+ if (e.target.name === 'newPass') {
+      this.setState({newPass: e.target.value});
+  } 
+  console.log("NEW PASSWORD RETRIEVED >>> " + this.state.newPass)
+  user.password  = this.state.newPass;
+
+  this.setState({user})
+  
+}
+
+
  
 
   onChangeForm = (e) => {
       let user = this.state.user
-      let password = e.target.getAttribute("password");
-      let password2 = e.target.getAttribute("password2");
-      console.log("First Password: "  + password);
-      console.log("HELOOOO>>>>>");
-
-     if (e.target.name === 'email') {
-          user.email = e.target.value;
-          
-      } else if (e.target.name === 'password') {
-          console.log("In the IFF Statement")
-          console.log(e.target.getAttribute("password"));
-          user.password = e.target.value;
-
-          if(password === password2){
-            console.log("Passwords match");
-          }
-          else{
-            console.log("Passwords do not match");
-          }
-      }
-      else if(e.target.name === "newPass"){
-        console.log("NEw Password >>>> " + e.target.value)
-
-      } 
+      if(e.target.name=== "email"){
       
+        this.setState({email: e.target.value})
+      }
+      
+      if(e.target.name=== "pass1"){
+
+        this.setState({password1: e.target.value})
+      
+      }
+      if(e.target.name=== "pass2"){
+    
+        this.setState({password2: e.target.value})
+      }
+      
+      
+    
      
       this.setState({user})
       
@@ -214,3 +252,25 @@ class App extends Component {
 }
 
 export default App;
+
+
+
+// if (e.target.name === 'email') {
+//   user.email = e.target.value;
+  
+// } else if (e.target.name === 'password') {
+//   console.log("In the IFF Statement")
+//   console.log(e.target.getAttribute("password"));
+//   user.password = e.target.value;
+
+//   if(password === password2){
+//     console.log("Passwords match");
+//   }
+//   else{
+//     console.log("Passwords do not match");
+//   }
+// }
+// else if(e.target.name === "newPass"){
+// console.log("NEw Password >>>> " + e.target.value)
+
+// } 

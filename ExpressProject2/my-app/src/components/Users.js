@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { updateUser, createUser, deleteUser } from '../service/service'
 
-export const Users = ({users, onChangeForm}) => {
+export const Users = ({users, onChangeForm3, onChangeForm2}) => {
     const [update, setUpdate] = useState(false);
     const [normal, setNormal] = useState(true);
     const [newPassword1, setPassword] = useState('');
@@ -27,6 +27,7 @@ export const Users = ({users, onChangeForm}) => {
 
     function savePassword(e){
         let userEmail = sessionStorage.getItem('email');
+        console.log(userEmail);
         console.log(newPassword1)
         updateUser(userEmail, newPassword1)
         .then(response => {
@@ -48,7 +49,7 @@ export const Users = ({users, onChangeForm}) => {
          return(
              <td>
             <form>
-             <input type="text"   onChange={setPassword()}  className="form-control"  name="newPass" id="newPass"  />
+             <input type="text"   onChange={(e) => onChangeForm3(e)} className="form-control"  name="newPass" id="newPass"  />
              <button type="button" onClick={(e) => savePassword(e)}className="btn btn-success">Save</button>
              </form>
              </td>
