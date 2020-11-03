@@ -28,7 +28,7 @@ User.create(new_user, function(err, user) {
   res.send(err);
   res.json({error:false,message:"User added successfully!",data:user});
 });
-alert("You have successfully added a user into the database")
+
 }
 };
 

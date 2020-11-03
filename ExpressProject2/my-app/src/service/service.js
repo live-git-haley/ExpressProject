@@ -56,8 +56,8 @@ export async function createUser(data) {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({data})
       })
+
     return await response.json();
-  alert('Congrats! You successfully added a new user to the db.')
 
   }
  
